@@ -12,10 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Aliasy middleware
-        $middleware->alias('auth.video', \App\Http\Middleware\VideoAccessMiddleware::class);
+        // Aliasy middleware jako tablica asocjacyjna
+        $middleware->alias([
+            'auth.video' => \App\Http\Middleware\VideoAccessMiddleware::class
+        ]);
         
-        // Rate limiting dla logowania
+        // Grupa web
         $middleware->group('web', [
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
@@ -26,9 +28,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         // Rate limiting dla streamowania wideo
-        $middleware->throttle('video-stream', [
-            'max_attempts' => 180,
-            'decay_minutes' => 1,
+        $middleware->throttle([
+            'video-stream' => [
+                'max_attempts' => 180,
+                'decay_minutes' => 1
+            ]
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
