@@ -5,9 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoStreamController;
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 Route::view('/login', 'login')->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:6,1');
@@ -19,7 +19,7 @@ Route::middleware(['auth.video'])->group(function () {
 });
 
 Route::get('/stream/{token}', [VideoStreamController::class, 'stream'])
-    ->name('videos.stream')
-    ->middleware(['auth.video', 'throttle:video-stream']);
+    ->middleware(['auth.video', 'throttle:180,1'])
+    ->name('videos.stream');
 
 

@@ -29,16 +29,18 @@
         }
         .watermark {
             position: absolute;
-            bottom: 20px;
+            top: 20px;
             left: 20px;
             color: white;
-            opacity: 0.7;
+            opacity: 0.8;
             pointer-events: none;
-            text-shadow: 1px 1px 2px #000;
-            font-size: 14px;
-            padding: 4px 8px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 4px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 24px;
+            font-weight: 500;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 6px;
+            z-index: 1000;
         }
         .video-info {
             margin-top: 20px;
@@ -61,6 +63,25 @@
             margin: 0 0 20px 0;
             color: #1f2937;
         }
+        .video-stats {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .video-stats p {
+            margin: 8px 0;
+            color: #4b5563;
+            font-size: 0.95rem;
+        }
+        .video-stats strong {
+            color: #1f2937;
+        }
+        .warning {
+            color: #dc2626;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -76,6 +97,14 @@
                     Twoja przeglądarka nie obsługuje odtwarzania wideo.
                 </video>
                 <div class="watermark">{{ session('user_email') }}</div>
+            </div>
+
+            <div class="video-stats">
+                <p><strong>Pozostało odtworzeń:</strong> {{ $remaining_views }} z 3</p>
+                <p><strong>Token ważny do:</strong> {{ $access->expires_at->format('Y-m-d H:i:s') }}</p>
+                @if($remaining_views <= 1)
+                    <p class="warning">Uwaga: Pozostało tylko {{ $remaining_views }} odtworzenie!</p>
+                @endif
             </div>
         </div>
     </div>
